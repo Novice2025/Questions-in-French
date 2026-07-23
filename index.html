@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Guide Définitif des Questions en Français</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        french: {
+                            blue: '#002395',
+                            white: '#FFFFFF',
+                            red: '#ED2939',
+                            dark: '#0f172a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Alpine.js for interactivity -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-blue-600 selection:text-white" x-data="{ darkMode: false, activeTab: 'theory', searchQuery: '', selectedCategory: 'all' }" :class="{ 'dark bg-slate-950 text-slate-100': darkMode }">
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-red-600 flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/20">
+                    <span class="text-lg">Fr</span>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg tracking-tight text-slate-900 dark:text-white leading-tight">InterroMaître</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Le Guide Ultime des Questions en Français</p>
+                </div>
+            </div>
+
+            <!-- Nav Tabs -->
+            <nav class="hidden md:flex space-x-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+                <button @click="activeTab = 'theory'" :class="{ 'bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm': activeTab === 'theory', 'text-slate-600 dark:text-slate-400 hover:text-slate-900': activeTab !== 'theory' }" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all">
+                    <i class="fa-solid fa-book-open mr-2"></i>Théorie & Registres
+                </button>
+                <button @click="activeTab = 'generator'" :class="{ 'bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm': activeTab === 'generator', 'text-slate-600 dark:text-slate-400 hover:text-slate-900': activeTab !== 'generator' }" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all">
+                    <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Constructeur Interactif
+                </button>
+                <button @click="activeTab = 'examples'" :class="{ 'bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm': activeTab === 'examples', 'text-slate-600 dark:text-slate-400 hover:text-slate-900': activeTab !== 'examples' }" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all">
+                    <i class="fa-solid fa-list-check mr-2"></i>20 Exemples Pratiques
+                </button>
+                <button @click="activeTab = 'exams'" :class="{ 'bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm': activeTab === 'exams', 'text-slate-600 dark:text-slate-400 hover:text-slate-900': activeTab !== 'exams' }" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all">
+                    <i class="fa-solid fa-graduation-cap mr-2"></i>Guide des Examens (DELF/TCF)
+                </button>
+            </nav>
+
+            <div class="flex items-center space-x-3">
+                <!-- Theme Toggle -->
+                <button @click="darkMode = !darkMode" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                    <i class="fa-solid" :class="darkMode ? 'fa-sun text-amber-400' : 'fa-moon text-slate-700'"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Navigation bar strip -->
+        <div class="md:hidden flex overflow-x-auto space-x-2 px-4 py-2 bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+            <button @click="activeTab = 'theory'" :class="{ 'bg-blue-600 text-white': activeTab === 'theory' }" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap">Théorie</button>
+            <button @click="activeTab = 'generator'" :class="{ 'bg-blue-600 text-white': activeTab === 'generator' }" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap">Constructeur</button>
+            <button @click="activeTab = 'examples'" :class="{ 'bg-blue-600 text-white': activeTab === 'examples' }" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap">20 Exemples</button>
+            <button @click="activeTab = 'exams'" :class="{ 'bg-blue-600 text-white': activeTab === 'exams' }" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap">Examens</button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- TAB 1: THEORY & REGISTERS -->
+        <div x-show="activeTab === 'theory'" x-cloak class="space-y-10">
+            <!-- Hero section -->
+            <div class="relative overflow-hidden bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 rounded-3xl p-8 sm:p-12 text-white shadow-2xl">
+                <div class="absolute -right-10 -bottom-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="relative z-10 max-w-2xl">
+                    <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-300 border border-blue-400/30 rounded-full text-xs font-semibold mb-4 tracking-wide uppercase">Maîtrise grammaticale</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">L'Art de Poser des Questions en Français</h2>
+                    <p class="text-blue-100 text-base sm:text-lg mb-6 leading-relaxed">
+                        En français, la manière de questionner dépend entièrement du contexte social, du niveau de langue (registre) et de l'effet recherché. Découvrez les trois structures fondamentales et comment adapter votre ton.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <button @click="activeTab = 'generator'" class="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5">
+                            Tester le constructeur <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                        <button @click="activeTab = 'examples'" class="px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl backdrop-blur-md border border-white/20 transition-all">
+                            Voir les 20 exemples
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The 3 Core Structures -->
+            <div class="space-y-6">
+                <div class="border-b border-slate-200 dark:border-slate-800 pb-4">
+                    <h3 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Les Trois Façons de Poser une Question</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm">Du niveau le plus familier au niveau le plus formel.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Card 1: Intonation -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-3 py-1 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-bold rounded-lg uppercase">Familier & Oral</span>
+                                <i class="fa-solid fa-face-smile text-emerald-600 text-xl"></i>
+                            </div>
+                            <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-2">1. L'Intonation (Déclarative + ?)</h4>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4">
+                                On garde l'ordre de la phrase affirmative et on monte la voix à la fin. C'est la forme la plus courante à l'oral entre amis ou en famille.
+                            </p>
+                            <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-100 dark:border-slate-800 mb-4 font-mono text-xs text-slate-700 dark:text-slate-300">
+                                <strong>Exemple :</strong> Tu viens ce soir ?
+                            </div>
+                        </div>
+                        <div class="text-xs text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800 pt-3">
+                            ⚠️ À éviter à l'écrit formel ou dans les examens officiels.
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Est-ce que -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-bold rounded-lg uppercase">Standard & Sûr</span>
+                                <i class="fa-solid fa-thumbs-up text-blue-600 text-xl"></i>
+                            </div>
+                            <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-2">2. L'Ajout de « Est-ce que »</h4>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4">
+                                On ajoute simplement <code class="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-blue-600 dark:text-blue-400 font-mono">est-ce que</code> (ou <code class="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-blue-600 dark:text-blue-400 font-mono">qu'est-ce que</code> avec un pronom interrogatif) au début d'une phrase normale.
+                            </p>
+                            <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-100 dark:border-slate-800 mb-4 font-mono text-xs text-slate-700 dark:text-slate-300">
+                                <strong>Exemple :</strong> Est-ce que tu viens ce soir ?
+                            </div>
+                        </div>
+                        <div class="text-xs text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800 pt-3">
+                            ✅ Idéal pour la conversation polie, les mails professionnels et l'écrit courant.
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Inversion -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs font-bold rounded-lg uppercase">Soutenu & Formel</span>
+                                <i class="fa-solid fa-landmark text-purple-600 text-xl"></i>
+                            </div>
+                            <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-2">3. L'Inversion Sujet-Verbe</h4>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4">
+                                On inverse le pronom et le verbe en les séparant par un tiret (<code class="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-purple-600 dark:text-purple-400 font-mono">Viens-tu ?</code>). Très élégant et requis à l'écrit littéraire ou académique.
+                            </p>
+                            <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-100 dark:border-slate-800 mb-4 font-mono text-xs text-slate-700 dark:text-slate-300">
+                                <strong>Exemple :</strong> Venez-vous ce soir ?
+                            </div>
+                        </div>
+                        <div class="text-xs text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800 pt-3">
+                            🎓 Indispensable pour réussir les productions écrites du DELF/TCF.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tone and Politeness Deep Dive -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Politeness: Tu vs Vous -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-600 font-bold">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-slate-900 dark:text-white">Le dilemme de la politesse : « Tu » vs « Vous »</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Règles fondamentales du vouvoiement</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                        En français, le choix entre le tutoiement (<code class="font-mono text-blue-600">tu</code>) et le vouvoiement (<code class="font-mono text-blue-600">vous</code>) marque la distance sociale, la hiérarchie ou le respect.
+                    </p>
+                    <ul class="space-y-3 text-sm text-slate-700 dark:text-slate-300">
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-circle-check text-emerald-500 mt-1"></i>
+                            <div><strong>Utiliser « Vous » :</strong> Inconnus adultes, supérieurs hiérarchiques, clients, professeurs, personnes âgées, ou en situation administrative.</div>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-circle-check text-blue-500 mt-1"></i>
+                            <div><strong>Utiliser « Tu » :</strong> Amis, famille, enfants, collègues du même rang (après accord tacite), étudiants entre eux, animaux.</div>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-triangle-exclamation text-amber-500 mt-1"></i>
+                            <div><strong>Piège culturel :</strong> Ne jamais tutoyer un inconnu en France sans y être invité (« On peut se tutoyer ? »).</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Question Words (Les Mots Interrogatifs) -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center text-purple-600 font-bold">
+                            <i class="fa-solid fa-circle-question"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-slate-900 dark:text-white">Les Mots Interrogatifs Clés</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Pour obtenir des informations précises</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 text-sm">
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+                            <span class="font-bold text-blue-600 dark:text-blue-400">Qui ?</span> <span class="text-xs text-slate-500 block">Personne (Who?)</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+                            <span class="font-bold text-blue-600 dark:text-blue-400">Que / Quoi ?</span> <span class="text-xs text-slate-500 block">Chose (What?)</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+                            <span class="font-bold text-blue-600 dark:text-blue-400">Où ?</span> <span class="text-xs text-slate-500 block">Lieu (Where?)</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+                            <span class="font-bold text-blue-600 dark:text-blue-400">Quand ?</span> <span class="text-xs text-slate-500 block">Temps (When?)</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+                            <span class="font-bold text-blue-600 dark:text-blue-400">Pourquoi ?</span> <span class="text-xs text-slate-500 block">Cause (Why?) → Parce que</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+                            <span class="font-bold text-blue-600 dark:text-blue-400">Comment ?</span> <span class="text-xs text-slate-500 block">Manière (How?)</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 col-span-2">
+                            <span class="font-bold text-blue-600 dark:text-blue-400">Combien (de) ?</span> <span class="text-xs text-slate-500 block">Quantité (How much/many?)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: INTERACTIVE CONSTRUCTOR -->
+        <div x-show="activeTab === 'generator'" x-cloak class="space-y-8" x-data="{ 
+            subject: 'tu', 
+            verbType: 'vouloir', 
+            tense: 'present', 
+            questionWord: 'quoi',
+            questionType: 'est-ce que',
+            get generatedSentence() {
+                // Logic for interactive sentence builder preview
+                let subPronoun = this.subject;
+                let vObj = this.verbMap[this.verbType];
+                let conj = vObj[this.tense][subPronoun] || 'veux';
+                let qw = this.questionWordMap[this.questionWord];
+                
+                if (this.questionType === 'intonation') {
+                    if (qw.word === 'Est-ce que...') return `${qw.base} ${subPronoun} ${conj} ?`;
+                    return `${qw.base} ${subPronoun} ${conj} ?`;
+                } else if (this.questionType === 'est-ce que') {
+                    if (qw.word === 'Est-ce que...') return `Est-ce que ${subPronoun} ${conj} ?`;
+                    return `${qw.word} est-ce que ${subPronoun} ${conj} ?`;
+                } else {
+                    // inversion
+                    let hyphenSub = subPronoun === 'je' ? 'je' : (subPronoun === 'tu' ? 'tu' : (subPronoun === 'il' ? 'il-il' : subPronoun));
+                    return `${qw.word} ${conj}-${subPronoun} ?`;
+                }
+            },
+            questionWordMap: {
+                'quoi': { word: 'Que', base: 'tu veux' },
+                'ou': { word: 'Où', base: 'tu vas' },
+                'quand': { word: 'Quand', base: 'tu arrives' },
+                'pourquoi': { word: 'Pourquoi', base: 'tu ris' },
+                'comment': { word: 'Comment', base: 'tu fais' },
+                'combien': { word: 'Combien', base: 'ça coûte' },
+                'none': { word: 'Est-ce que...', base: 'tu viens' }
+            },
+            verbMap: {
+                'vouloir': { present: { 'tu': 'veux', 'vous': 'voulez', 'il': 'veut', 'nous': 'voulons' } },
+                'pouvoir': { present: { 'tu': 'peux', 'vous': 'pouvez', 'il': 'peut', 'nous': 'pouvons' } },
+                'aimer': { present: { 'tu': 'aimes', 'vous': 'aimez', 'il': 'aime', 'nous': 'aimons' } },
+                'venir': { present: { 'tu': 'viens', 'vous': 'venez', 'il': 'vient', 'nous': 'venons' } }
+            }
+        }">
+            <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div class="max-w-3xl mb-8">
+                    <span class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest">Outil d'apprentissage</span>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">Constructeur de Questions en Direct</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mt-2">
+                        Sélectionnez les paramètres ci-dessous pour voir instantanément comment se forme une question en français selon les registres.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- 1. Question Word -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">1. Type d'information (Mot interrogatif)</label>
+                        <select x-model="questionWord" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                            <option value="none">Question fermée (Oui / Non)</option>
+                            <option value="quoi">Quoi / Que (Objet)</option>
+                            <option value="ou">Où (Lieu)</option>
+                            <option value="quand">Quand (Temps)</option>
+                            <option value="pourquoi">Pourquoi (Cause)</option>
+                            <option value="comment">Comment (Manière)</option>
+                        </select>
+                    </div>
+
+                    <!-- 2. Subject -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">2. Pronom Sujet (Politesse)</label>
+                        <select x-model="subject" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                            <option value="tu">Tu (Familier / Proche)</option>
+                            <option value="vous">Vous (Formel / Polivalant)</option>
+                            <option value="il">Il (Troisième personne)</option>
+                            <option value="nous">Nous (Collectif)</option>
+                        </select>
+                    </div>
+
+                    <!-- 3. Structure / Register -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">3. Registre de Langue</label>
+                        <select x-model="questionType" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                            <option value="est-ce que">Standard (« Est-ce que »)</option>
+                            <option value="intonation">Familier (Intonation pure)</option>
+                            <option value="inversion">Soutenu (Inversion sujet-verbe)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Live Preview Display Box -->
+                <div class="bg-gradient-to-r from-blue-900 to-indigo-900 rounded-2xl p-6 sm:p-8 text-white shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <div>
+                        <span class="text-xs uppercase tracking-widest text-blue-300 font-bold block mb-1">Résultat généré</span>
+                        <div class="text-2xl sm:text-3xl font-black tracking-wide font-mono" x-text="generatedSentence"></div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-md px-4 py-3 rounded-xl border border-white/20 text-xs max-w-xs">
+                        <span class="font-bold block mb-1 text-blue-200"><i class="fa-solid fa-circle-info mr-1"></i> Note pédagogique :</span>
+                        Ce format s'adapte parfaitement au contexte choisi pour vos examens ou vos conversations quotidiennes.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: 20 PRACTICAL EXAMPLES -->
+        <div x-show="activeTab === 'examples'" x-cloak class="space-y-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">20 Cas Pratiques & Constructions</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm">Explorez 20 questions types découpées en situation réelle, analyse de ton, registre et astuces d'examen.</p>
+                </div>
+                <!-- Filter buttons -->
+                <div class="flex flex-wrap gap-2">
+                    <button @click="selectedCategory = 'all'" :class="{ 'bg-blue-600 text-white': selectedCategory === 'all', 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300': selectedCategory !== 'all' }" class="px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 shadow-sm transition-all">Tous</button>
+                    <button @click="selectedCategory = 'social'" :class="{ 'bg-blue-600 text-white': selectedCategory === 'social', 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300': selectedCategory !== 'social' }" class="px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 shadow-sm transition-all">Vie Sociale</button>
+                    <button @click="selectedCategory = 'prof'" :class="{ 'bg-blue-600 text-white': selectedCategory === 'prof', 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300': selectedCategory !== 'prof' }" class="px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 shadow-sm transition-all">Professionnel</button>
+                    <button @click="selectedCategory = 'travel'" :class="{ 'bg-blue-600 text-white': selectedCategory === 'travel', 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300': selectedCategory !== 'travel' }" class="px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 shadow-sm transition-all">Voyage & Achats</button>
+                    <button @click="selectedCategory = 'admin'" :class="{ 'bg-blue-600 text-white': selectedCategory === 'admin', 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300': selectedCategory !== 'admin' }" class="px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 shadow-sm transition-all">Administratif</button>
+                </div>
+            </div>
+
+            <!-- Grid of 20 items -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+                <!-- Example Template Data loop via HTML templates representing the 20 comprehensive cases -->
+                
+                <!-- 1 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow" x-show="selectedCategory === 'all' || selectedCategory === 'social'">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-bold rounded-md">1. Salutation & Rencontre</span>
+                        <span class="text-xs text-slate-400 font-mono">Familier / Oral</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 font-mono text-blue-600 dark:text-blue-400">« Ça va ? / Comment ça va ? »</h4>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Quand l'utiliser :</strong> Pour saluer un ami ou un collègue familier.</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                        <div><strong>Analyse :</strong> Utilisation de l'intonation et d'expressions figées.</div>
+                        <div><strong>Politesse :</strong> Réservé au tutoiement. Ne pas utiliser avec un supérieur.</div>
+                    </div>
+                </div>
+
+                <!-- 2 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow" x-show="selectedCategory === 'all' || selectedCategory === 'social'">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-bold rounded-md">2. Présentation</span>
+                        <span class="text-xs text-slate-400 font-mono">Standard / Formel</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 font-mono text-blue-600 dark:text-blue-400">« Comment vous appelez-vous ? »</h4>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Quand l'utiliser :</strong> Lors d'un entretien officiel ou avec un inconnu.</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                        <div><strong>Analyse :</strong> Inversion sujet-verbe formelle (<code class="font-mono">appelez-vous</code>).</div>
+                        <div><strong>Politesse :</strong> Vouvoiement obligatoire.</div>
+                    </div>
+                </div>
+
+                <!-- 3 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow" x-show="selectedCategory === 'all' || selectedCategory === 'travel'">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 text-xs font-bold rounded-md">3. Voyage / Localisation</span>
+                        <span class="text-xs text-slate-400 font-mono">Standard (« Est-ce que »)</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 font-mono text-blue-600 dark:text-blue-400">« Où est-ce que se trouve la gare ? »</h4>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Quand l'utiliser :</strong> Pour demander son chemin dans une ville francophone.</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                        <div><strong>Analyse :</strong> Structure avec <code class="font-mono">où est-ce que</code> très naturelle et polie.</div>
+                        <div><strong>Politesse :</strong> Accompagner d'un « Pardon, monsieur/madame ».</div>
+                    </div>
+                </div>
+
+                <!-- 4 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow" x-show="selectedCategory === 'all' || selectedCategory === 'travel'">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 text-xs font-bold rounded-md">4. Achats / Magasin</span>
+                        <span class="text-xs text-slate-400 font-mono">Formel / Poli</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 font-mono text-blue-600 dark:text-blue-400">« Combien coûte cet article ? »</h4>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Quand l'utiliser :</strong> Pour connaître le prix d'un produit en boutique.</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                        <div><strong>Analyse :</strong> Inversion directe <code class="font-mono">coûte cet article</code>.</div>
+                        <div><strong>Politesse :</strong> Forme standard courante en magasin.</div>
+                    </div>
+                </div>
+
+                <!-- 5 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow" x-show="selectedCategory === 'all' || selectedCategory === 'admin'">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs font-bold rounded-md">5. Administratif / Mairie</span>
+                        <span class="text-xs text-slate-400 font-mono">Soutenu / Formel</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 font-mono text-blue-600 dark:text-blue-400">« Auriez-vous un formulaire de demande ? »</h4>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Quand l'utiliser :</strong> Dans les administrations ou banques.</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                        <div><strong>Analyse :</strong> Utilisation du conditionnel de politesse (<code class="font-mono">auriez-vous</code>).</div>
+                        <div><strong>Politesse :</strong> Extrêmement poli et recommandé pour l'écrit formel.</div>
+                    </div>
+                </div>
+
+                <!-- 6 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow" x-show="selectedCategory === 'all' || selectedCategory === 'prof'">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-bold rounded-md">6. Professionnel / Réunion</span>
+                        <span class="text-xs text-slate-400 font-mono">Standard / Courant</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 font-mono text-blue-600 dark:text-blue-400">« Quand est-ce que la réunion commence ? »</h4>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Quand l'utiliser :</strong> Pour planifier le travail en équipe.</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                        <div><strong>Analyse :</strong> Structure en <code class="font-mono">Quand est-ce que</code> idéale à l'oral professionnel.</div>
+                        <div><strong>Politesse :</strong> Vouvoiement ou tutoiement d'équipe selon la culture d'entreprise.</div>
+                    </div>
+                </div>
+
+                <!-- 7 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow" x-show="selectedCategory === 'all' || selectedCategory === 'social'">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-bold rounded-md">7. Invitation / Loisirs</span>
+                        <span class="text-xs text-slate-400 font-mono">Familier / Oral</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 font-mono text-blue-600 dark:text-blue-400">« Tu viens manger avec nous ce soir ? »</h4>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Quand l'utiliser :</strong> Entre amis proches.</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                        <div><strong>Analyse :</strong> Intonation pure avec pronom <code class="font-mono">tu</code>.</div>
+                        <div><strong>Politesse :</strong> Tutoiement amical direct.</div>
+                    </div>
+                </div>
+
+                <!-- 8 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow" x-show="selectedCategory === 'all' || selectedCategory === 'prof'">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs font-bold rounded-md">8. Explication / Pédagogie</span>
+                        <span class="text-xs text-slate-400 font-mono">Soutenu / Académique</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 font-mono text-blue-600 dark:text-blue-400">« Pourriez-vous répéter s'il vous plaît ? »</h4>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Quand l'utiliser :</strong> En cours ou en réunion lorsqu'on n'a pas compris.</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                        <div><strong>Analyse :</strong> Conditionnel de politesse avec <code class="font-mono">pourriez-vous</code>.</div>
+                        <div><strong>Politesse :</strong> Très respectueux.</div>
+                    </div>
+                </div>
+
+                <!-- 9 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow" x-show="selectedCategory === 'all' || selectedCategory === 'admin'">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs font-bold rounded-md">9. Motif / Justification</span>
+                        <span class="text-xs text-slate-400 font-mono">Formel / Écrit</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 font-mono text-blue-600 dark:text-blue-400">« Pourquoi cette démarche est-elle nécessaire ? »</h4>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Quand l'utiliser :</strong> Dans une lettre de motivation ou un questionnaire officiel.</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                        <div><strong>Analyse :</strong> Inversion complexe avec ajout de l'e euphonique (<code class="font-mono">est-elle</code>).</div>
+                        <div><strong>Politesse :</strong> Registre intellectuel et soigné.</div>
+                    </div>
+                </div>
+
+                <!-- 10 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow" x-show="selectedCategory === 'all' || selectedCategory === 'travel'">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 text-xs font-bold rounded-md">10. Restauration / Café</span>
+                        <span class="text-xs text-slate-400 font-mono">Standard / Courant</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 font-mono text-blue-600 dark:text-blue-400">« Qu'est-ce que vous recommandez ? »</h4>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Quand l'utiliser :</strong> Pour commander au restaurant.</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                        <div><strong>Analyse :</strong> Emploi de <code class="font-mono">qu'est-ce que</code> pour interroger sur un objet.</div>
+                        <div><strong>Politesse :</strong> Vouvoiement du serveur.</div>
+                    </div>
+                </div>
+
+                <!-- 11 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow" x-show="selectedCategory === 'all' || selectedCategory === 'social'">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-bold rounded-md">11. Santé & Bien-être</span>
+                        <span class="text-xs text-slate-400 font-mono">Familier / Proche</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 font-mono text-blue-600 dark:text-blue-400">« Tu te sens mieux aujourd'hui ? »</h4>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Quand l'utiliser :</strong> Pour prendre des nouvelles d'un proche malade.</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                        <div><strong>Analyse :</strong> Verbe pronominal interrogatif par intonation.</div>
+                        <div><strong>Politesse :</strong> Tutoiement empathique.</div>
+                    </div>
+                </div>
+
+                <!-- 12 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow" x-show="selectedCategory === 'all' || selectedCategory === 'prof'">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-bold rounded-md">12. Compétences / CV</span>
+                        <span class="text-xs text-slate-400 font-mono">Formel / Entretien</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 font-mono text-blue-600 dark:text-blue-400">« Maîtrisez-vous les logiciels de gestion ? »</h4>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Quand l'utiliser :</strong> En entretien d'embauche par le recruteur.</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                        <div><strong>Analyse :</strong> Inversion professionnelle directe <code class="font-mono">Maîtrisez-vous</code>.</div>
+                        <div><strong>Politesse :</strong> Vouvoiement de rigueur en entretien.</div>
+                    </div>
+                </div>
+
+                <!-- 13 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow" x-show="selectedCategory === 'all' || selectedCategory === 'travel'">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 text-xs font-bold rounded-md">13. Météo & Climat</span>
+                        <span class="text-xs text-slate-400 font-mono">Standard / Courant</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 font-mono text-blue-600 dark:text-blue-400">« Quel temps fait-il à Paris ? »</h4>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Quand l'utiliser :</strong> Pour entamer une conversation ou planifier une sortie.</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                        <div><strong>Analyse :</strong> Expression figée impersonnelle <code class="font-mono">quel temps fait-il</code>.</div>
+                        <div><strong>Politesse :</strong> Neutre.</div>
+                    </div>
+                </div>
+
+                <!-- 14 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow" x-show="selectedCategory === 'all' || selectedCategory === 'social'">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-bold rounded-md">14. Avis / Opinion</span>
+                        <span class="text-xs text-slate-400 font-mono">Standard / Débat</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 font-mono text-blue-600 dark:text-blue-400">« Qu'est-ce que tu penses de ce projet ? »</h4>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Quand l'utiliser :</strong> Pour solliciter l'avis d'une personne.</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                        <div><strong>Analyse :</strong> Structure <code class="font-mono">qu'est-ce que tu penses de</code>.</div>
+                        <div><strong>Politesse :</strong> Familier ou amical.</div>
+                    </div>
+                </div>
+
+                <!-- 15 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow" x-show="selectedCategory === 'all' || selectedCategory === 'admin'">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs font-bold rounded-md">15. Horaires / Logistique</span>
+                        <span class="text-xs text-slate-400 font-mono">Formel / Précis</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 font-mono text-blue-600 dark:text-blue-400">« À quelle heure le bureau ouvre-t-il ? »</h4>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Quand l'utiliser :</strong> Pour s'informer des heures d'ouverture.</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                        <div><strong>Analyse :</strong> Inversion avec <code class="font-mono">ouvre-t-il</code> (liaison en t).</div>
+                        <div><strong>Politesse :</strong> Formel et soigné.</div>
+                    </div>
+                </div>
+
+                <!-- 16 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow" x-show="selectedCategory === 'all' || selectedCategory === 'travel'">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 text-xs font-bold rounded-md">16. Hôtel / Réservation</span>
+                        <span class="text-xs text-slate-400 font-mono">Formel / Courtois</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 font-mono text-blue-600 dark:text-blue-400">« Y a-t-il des chambres disponibles ? »</h4>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Quand l'utiliser :</strong> Lors de la réservation d'un hôtel par téléphone.</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                        <div><strong>Analyse :</strong> Inversion avec la structure impersonnelle <code class="font-mono">y a-t-il</code>.</div>
+                        <div><strong>Politesse :</strong> Très poli, idéal pour les services.</div>
+                    </div>
+                </div>
+
+                <!-- 17 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow" x-show="selectedCategory === 'all' || selectedCategory === 'prof'">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-bold rounded-md">17. Projet / Collaboration</span>
+                        <span class="text-xs text-slate-400 font-mono">Standard / Professionnel</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 font-mono text-blue-600 dark:text-blue-400">« Qui est responsable de ce dossier ? »</h4>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Quand l'utiliser :</strong> Pour identifier un interlocuteur au travail.</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                        <div><strong>Analyse :</strong> Utilisation du pronom interrogatif <code class="font-mono">qui</code> en tête.</div>
+                        <div><strong>Politesse :</strong> Neutre et professionnel.</div>
+                    </div>
+                </div>
+
+                <!-- 18 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow" x-show="selectedCategory === 'all' || selectedCategory === 'social'">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-bold rounded-md">18. Goûts & Préférences</span>
+                        <span class="text-xs text-slate-400 font-mono">Familier / Courant</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 font-mono text-blue-600 dark:text-blue-400">« Tu préfères le café ou le thé ? »</h4>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Quand l'utiliser :</strong> Pour offrir une boisson à un invité.</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                        <div><strong>Analyse :</strong> Alternative directe par intonation.</div>
+                        <div><strong>Politesse :</strong> Convivial.</div>
+                    </div>
+                </div>
+
+                <!-- 19 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow" x-show="selectedCategory === 'all' || selectedCategory === 'admin'">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs font-bold rounded-md">19. Problème technique</span>
+                        <span class="text-xs text-slate-400 font-mono">Formel / Courtois</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 font-mono text-blue-600 dark:text-blue-400">« Pourriez-vous m'aider avec cette panne ? »</h4>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Quand l'utiliser :</strong> Pour demander assistance auprès d'un technicien.</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                        <div><strong>Analyse :</strong> Conditionnel de politesse avec <code class="font-mono">m'aider</code>.</div>
+                        <div><strong>Politesse :</strong> Très efficace et poli.</div>
+                    </div>
+                </div>
+
+                <!-- 20 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow" x-show="selectedCategory === 'all' || selectedCategory === 'social'">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2.5 py-1 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-bold rounded-md">20. Clôture de dialogue</span>
+                        <span class="text-xs text-slate-400 font-mono">Standard / Amical</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 font-mono text-blue-600 dark:text-blue-400">« On se revoit quand ? »</h4>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Quand l'utiliser :</strong> En se séparant d'un ami ou d'une connaissance.</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                        <div><strong>Analyse :</strong> Construction avec pronom <code class="font-mono">on</code> et mot interrogatif en fin de phrase à l'oral.</div>
+                        <div><strong>Politesse :</strong> Très familier, typique de l'oral spontané.</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 4: EXAM GUIDE (DELF / TCF) -->
+        <div x-show="activeTab === 'exams'" x-cloak class="space-y-8">
+            <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div class="max-w-3xl mb-8">
+                    <span class="text-xs font-bold text-red-600 uppercase tracking-widest">Guide Officiel des Examens</span>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">Réussir ses Questions au DELF & au TCF</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mt-2">
+                        Ce qui est autorisé, ce qui est pénalisé, et les structures exactes attendues par les examinateurs officiels (CIEP / France Éducation International).
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <!-- What is Allowed / Encouraged -->
+                    <div class="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/50 rounded-2xl p-6">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <h4 class="text-lg font-bold text-emerald-900 dark:text-emerald-200">Ce qui est RECOMMANDÉ (Validé)</h4>
+                        </div>
+                        <ul class="space-y-3 text-sm text-emerald-800 dark:text-emerald-300">
+                            <li class="flex items-start space-x-2">
+                                <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
+                                <div><strong>L'utilisation de « Est-ce que » :</strong> Parfaitement correcte aux niveaux A2 et B1 pour l'écrit et l'oral. Zéro risque d'erreur d'inversion.</div>
+                            </li>
+                            <li class="flex items-start space-x-2">
+                                <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
+                                <div><strong>L'inversion sujet-verbe aux niveaux B2/C1 :</strong> Indispensable dans la lettre formelle et l'expression orale soutenue pour montrer sa maîtrise grammaticale.</div>
+                            </li>
+                            <li class="flex items-start space-x-2">
+                                <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
+                                <div><strong>Le vouvoiement dans l'interaction simulée :</strong> Toujours vouvoyer l'examinateur dans la partie jeu de rôle si le sujet l'exige (ex: réserver un hôtel, réagir face à un commerçant).</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- What is Penalized / Forbidden -->
+                    <div class="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/50 rounded-2xl p-6">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-red-600 text-white flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-xmark"></i>
+                            </div>
+                            <h4 class="text-lg font-bold text-red-900 dark:text-red-200">Ce qui est PÉNALISÉ (À éviter)</h4>
+                        </div>
+                        <ul class="space-y-3 text-sm text-red-800 dark:text-red-300">
+                            <li class="flex items-start space-x-2">
+                                <i class="fa-solid fa-circle-xmark text-red-600 mt-1"></i>
+                                <div><strong>L'intonation pure à l'écrit formel :</strong> Écrire <code class="font-mono bg-red-100 dark:bg-red-900 px-1 rounded">Tu viens demain ?</code> dans une lettre de réclamation ou un essai argumenté entraîne une perte directe de points en grammaire.</div>
+                            </li>
+                            <li class="flex items-start space-x-2">
+                                <i class="fa-solid fa-circle-xmark text-red-600 mt-1"></i>
+                                <div><strong>Le tutoiement déplacé :</strong> Tutoyer l'examinateur ou un client fictif dans un e-mail professionnel est sanctionné pour non-respect des registres sociolinguistiques.</div>
+                            </li>
+                            <li class="flex items-start space-x-2">
+                                <i class="fa-solid fa-circle-xmark text-red-600 mt-1"></i>
+                                <div><strong>Les doubles questions superflues :</strong> Éviter de mélanger <code class="font-mono bg-red-100 dark:bg-red-900 px-1 rounded">Est-ce que pourquoi...</code> ce qui constitue une faute de construction.</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-6 border border-slate-200 dark:border-slate-800">
+                    <h5 class="font-bold text-slate-900 dark:text-white mb-2"><i class="fa-solid fa-lightbulb text-amber-500 mr-2"></i>Conseil d'or pour l'examen oral (DELF B2) :</h5>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Lorsque vous posez une question à l'examinateur pendant le débat (ex: <em>« Pensez-vous réellement que les nouvelles technologies isolent les jeunes ? »</em>), utilisez l'inversion. Cela démontre instantanément un niveau linguistique supérieur et impressionne le jury.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-20 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+            <p>© 2026 InterroMaître — Guide Pédagogique Avancé de la Langue Française.</p>
+            <div class="flex space-x-4 mt-4 sm:mt-0">
+                <span>Grammaire</span>
+                <span>•</span>
+                <span>DELF / TCF</span>
+                <span>•</span>
+                <span>Registres & Politesse</span>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
